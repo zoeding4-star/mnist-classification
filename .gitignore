@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+dist/
+build/
+
+# 数据集（不在项目内, 但确保不被误提交）
+D:/mnist/
+/d/mnist/
+
+# 模型权重
+weights/
+*.pth
+*.pt
+
+# LaTeX临时文件
+*.aux
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+*.bbl
+*.blg
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
