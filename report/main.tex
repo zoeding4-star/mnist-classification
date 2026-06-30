@@ -1,26 +1,24 @@
-\documentclass[12pt,a4paper]{ctexart}
+\documentclass[12pt,a4paper]{article}
 
 % === 页面设置 ===
 \usepackage[margin=2.5cm]{geometry}
 \usepackage{setspace}
 \onehalfspacing
-\usepackage{fontspec}
-\setmainfont{Times New Roman}
-\setsansfont{Arial}
-\setmonofont{Courier New}
 
-% === 中文设置 ===
+% === 中文 ===
 \usepackage{xeCJK}
 \setCJKmainfont{SimSun}
 \setCJKsansfont{SimHei}
 \setCJKmonofont{FangSong}
+\setmainfont{Times New Roman}
 
-% === 数学与符号 ===
-\usepackage{amsmath,amssymb,amsfonts}
+% === 数学 ===
+\usepackage{amsmath,amssymb}
 \usepackage{bm}
 
 % === 图表 ===
 \usepackage{graphicx}
+\usepackage{caption}
 \usepackage{subcaption}
 \usepackage{booktabs}
 \usepackage{float}
@@ -53,7 +51,7 @@
 
 % === 标题 ===
 \title{\textbf{MNIST手写数字识别实验报告}}
-\author{学号：\_\_\_\_\_\_\_\_\_\_\quad 姓名：\_\_\_\_\_\_\_\_\_\_}
+\author{学号：2024010930\quad 姓名：丁炫婷}
 \date{\today}
 
 \begin{document}
@@ -69,7 +67,7 @@
 通过控制变量法，分别探究了网络结构、损失函数（交叉熵与标签平滑）、超参数
 （学习率、批大小）和正则化方法（Dropout、L2权重衰减）对分类准确率的影响。
 实验结果表明：改进CNN在测试集上达到99.36\%的最高准确率；网络结构对性能影响最为显著，
-CNN明显优于MLP；适中的学习率（$10^{-3}$）和批大小（64）表现最佳；
+CNN明显优于MLP；适中的学习率（10^{-3}）和批大小（64）表现最佳；
 正则化对过拟合有显著抑制作用。所有实验数据均基于固定的数据划分和随机种子，保证结果可复现。
 
 \vspace{0.5cm}
@@ -246,15 +244,12 @@ CNN\_Better & 390,858 & 1400.5 & 99.36\% & 99.36\% \\
 \begin{subfigure}{0.48\textwidth}
 \includegraphics[width=\textwidth]{curve_exp1_MLP_Shallow.pdf}
 \caption{MLP\_Shallow训练曲线}
-\label{fig:curve_mlp_s}
 \end{subfigure}
 \begin{subfigure}{0.48\textwidth}
 \includegraphics[width=\textwidth]{curve_exp1_CNN_Better.pdf}
 \caption{CNN\_Better训练曲线}
-\label{fig:curve_cnn_b}
 \end{subfigure}
 \caption{网络结构训练曲线对比}
-\label{fig:struct_curves}
 \end{figure}
 
 \textbf{分析}：
@@ -283,8 +278,8 @@ LabelSmooth($\varepsilon=0.1$) & 97.27\% & 0.6339 & 84.0 \\
 \end{table}
 
 \textbf{分析}：在本实验中，标签平滑反而导致准确率下降。
-可能的原因是：(1) 标签平滑对训练数据量较小的场景效果更优；
-(2) 平滑系数$\varepsilon=0.1$可能偏大；(3) 交叉熵损失在该任务上已经足够。
+可能的原因包括：(1)标签平滑对训练数据量较小的场景效果更优；
+(2)平滑系数$\varepsilon=0.1$可能偏大；(3)交叉熵损失在该任务上已经足够。
 
 \subsection{超参数对比}
 
@@ -319,16 +314,9 @@ $10^{-4}$ & 97.80\% & 97.80\% & 587.5 \\
 \caption{lr=$10^{-4}$}
 \end{subfigure}
 \caption{不同学习率下的训练曲线}
-\label{fig:lr_curves}
 \end{figure}
 
 \textbf{分析}：学习率$10^{-3}$表现最佳。$10^{-2}$过大导致收敛不稳定，$10^{-4}$过小导致收敛缓慢。
-
-\subsubsection{批大小}
-由于CPU训练时间限制，本组数据采用模型3个epoch的快速训练结果对比趋势：
-
-从实验结果可知，批大小64的验证准确率最高（98.38\%），
-批大小16收敛最快但存在一定波动，批大小256收敛最稳定但最终准确率略低。
 
 \subsection{正则化对比}
 
@@ -342,7 +330,6 @@ $10^{-4}$ & 97.80\% & 97.80\% & 587.5 \\
 \midrule
 无 & 0 & 0 & 98.39\% & 0.0520 \\
 Dropout & 0.7 & 0 & 95.00\% & 0.1871 \\
-L2 & 0 & $10^{-4}$ & -- & -- \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -358,7 +345,6 @@ L2 & 0 & $10^{-4}$ & -- & -- \\
 \caption{Dropout=0.7}
 \end{subfigure}
 \caption{正则化训练曲线对比}
-\label{fig:reg_curves}
 \end{figure}
 
 \textbf{分析}：Dropout率0.7过大导致性能严重下降（95.00\%），
@@ -369,32 +355,13 @@ L2 & 0 & $10^{-4}$ & -- & -- \\
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.55\textwidth]{cm_exp1_CNN_Better.pdf}
-\caption{最佳模型CNN\_Better的混淆矩阵}
-\label{fig:cm_best}
+\includegraphics[width=0.55\textwidth]{cm_MLP_Shallow.pdf}
+\caption{MLP\_Shallow的混淆矩阵}
 \end{figure}
 
-从混淆矩阵可以看出：(1) 对角线元素明显高于非对角线，说明分类效果良好；
-(2) 易混淆的数字对主要是4--9、7--9等形状相似的数字；
-(3) 数字1的识别准确率最高，数字9相对较低。
-
-\subsection{实验结果总结}
-
-\begin{table}[H]
-\centering
-\caption{全部实验结果汇总}
-\vspace{0.3cm}
-\begin{tabular}{lcccc}
-\toprule
-\textbf{影响因素} & \textbf{最佳设置} & \textbf{最高准确率} & \textbf{影响程度} \\
-\midrule
-网络结构 & CNN\_Better & 99.36\% & 最大（$\Delta=2.14\%$） \\
-损失函数 & CrossEntropy & 98.39\% & 较小（$\Delta=1.12\%$） \\
-学习率 & $10^{-3}$ & 99.00\% & 中等（$\Delta=1.20\%$） \\
-正则化 & 无/Dropout小 & 98.39\% & 显著（过强Dropout=-3.39\%） \\
-\bottomrule
-\end{tabular}
-\end{table}
+从混淆矩阵可以看出：(1)对角线元素明显高于非对角线，说明分类效果良好；
+(2)易混淆的数字对主要是4--9、7--9等形状相似的数字；
+(3)数字1的识别准确率最高，数字9相对较低。
 
 % ====== 六、实验结论 ======
 \section{实验结论}
@@ -432,18 +399,18 @@ L2 & 0 & $10^{-4}$ & -- & -- \\
 \subsection{项目结构}
 \begin{lstlisting}
 mnist-classification/
-├── src/
-│   ├── dataset.py    # 数据加载与预处理
-│   ├── models.py     # 4种网络结构定义
-│   ├── train.py      # 训练与验证逻辑
-│   ├── eval.py       # 测试评估与可视化
-│   └── main.py       # 主程序入口
-├── report/
-│   ├── main.tex      # 本实验报告
-│   └── figures/      # 实验图表
-├── weights/          # 模型权重（已gitignore）
-├── .gitignore
-└── README.md
++-- src/
+|   +-- dataset.py    # 数据加载与预处理
+|   +-- models.py     # 4种网络结构定义
+|   +-- train.py      # 训练与验证逻辑
+|   +-- eval.py       # 测试评估与可视化
+|   +-- main.py       # 主程序入口
++-- report/
+|   +-- main.tex      # 本实验报告
+|   +-- figures/      # 实验图表
++-- weights/          # 模型权重（已gitignore）
++-- .gitignore
++-- README.md
 \end{lstlisting}
 
 \subsection{数据加载核心代码}
@@ -454,21 +421,6 @@ def parse_idx_images(gz_path):
         assert magic == 2051
         data = np.frombuffer(f.read(), dtype=np.uint8).reshape(num, rows, cols)
     return data
-\end{lstlisting}
-
-\subsection{训练超参数}
-\begin{lstlisting}
-# 默认配置
-config = {
-    "optimizer": "Adam",
-    "learning_rate": 1e-3,
-    "batch_size": 64,
-    "loss_function": "CrossEntropy",
-    "epochs": 30,
-    "patience": 7,
-    "dropout": 0.0,
-    "weight_decay": 0.0,
-}
 \end{lstlisting}
 
 \end{document}
